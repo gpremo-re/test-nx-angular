@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
+    "affected-build": "nx affected -t build",
     "test": "nx test"
   },
   "private": true,
