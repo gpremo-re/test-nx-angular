@@ -6,8 +6,9 @@ COPY package.json package-lock.json ./
 
 RUN npm install
 
-COPY nx.json project.json tsconfig.app.json tsconfig.json ./
+COPY nx.json project.json tsconfig.app.json tsconfig.base.json tsconfig.json ./
 COPY public public
+COPY libs libs
 COPY src src
 
 RUN --mount=type=cache,target=/app/.nx/cache npm run build
