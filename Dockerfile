@@ -10,7 +10,7 @@ COPY nx.json project.json tsconfig.app.json tsconfig.json ./
 COPY public public
 COPY src src
 
-RUN --mount=type=cache,target=/app/.nx/cache npm run build --output-path=../build
+RUN --mount=type=cache,target=/app/.nx/cache npm run build
 
 FROM scratch
-COPY --from=BUILD build build
+COPY --from=BUILD /app/dist/test-nx-angular/browser/ build
