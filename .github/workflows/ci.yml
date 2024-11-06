@@ -16,6 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: 'npm'
+
+      - run: npm ci --legacy-peer-deps
+      - uses: nrwl/nx-set-shas@v4
+      - run: npm run build
+
       - uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
@@ -32,32 +41,11 @@ jobs:
             type=raw,value=latest
             type=raw,value=build-${{github.run_number}}
 
-      - name: Cache
-        uses: actions/cache@v3
-        id: cache
-        with:
-          path: |
-            var-cache-apt
-            var-lib-apt
-          key: cache-${{ github.ref_name }}-${{ hashFiles('Dockerfile') }}
-
-      - name: inject cache into docker
-        uses: reproducible-containers/buildkit-cache-dance@v3.1.0
-        with:
-          cache-map: |
-            {
-              "var-cache-apt": "/var/cache/apt",
-              "var-lib-apt": "/var/lib/apt"
-            }
-          skip-extraction: ${{ steps.cache.outputs.cache-hit }}
-
       - name: Build image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          file: ./.github/workflows/Dockerfile
+          context: ./dist/test-nx-angular/browser
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
