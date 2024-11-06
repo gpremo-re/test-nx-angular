@@ -7,4 +7,3 @@ node_modules
 eslint.config.js
 .prettier*
 jest.*
-package-lock.json
