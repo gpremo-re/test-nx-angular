@@ -1,0 +1,10 @@
+.github
+.idea
+.nx
+.vscode
+node_modules
+
+eslint.config.js
+.prettier*
+jest.*
+package-lock.json
